@@ -1,0 +1,32 @@
+#
+# SPDX-FileCopyrightText: © 2020-2025 Serpent OS Developers
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+name        : xwayland-satellite
+version     : v0.5
+release     : 1
+homepage    : https://github.com/Supreeeme/xwayland-satellite
+upstreams   :
+    - https://github.com/Supreeeme/xwayland-satellite/archive/refs/tags/v0.5.tar.gz : b0845b711750b9850b87d8a62fd7d9a07235fe63a3b7e5bdd727884c066f1b4c
+summary     : UPDATE SUMMARY
+description : |
+    UPDATE DESCRIPTION
+license     : UPDATE LICENSE
+builddeps   :
+    - libxcb
+    - pkgconfig(xcb-cursor)
+    - xwayland
+networking  : true
+setup       : |
+    %cargo_fetch
+build       : |
+    %cargo_build -F systemd
+install     : |
+    %cargo_install
+    sed -i 's#ExecStart=/usr/local/bin/xwayland-satellite#ExecStart=/usr/bin/xwayland-satellite#' resources/xwayland-satellite.service
+    %install_file resources/xwayland-satellite.service %(installroot)%(libdir)/systemd/system/xwayland-satellite.service
+check       : |
+    export XDG_RUNTIME_DIR=/run
+    %cargo_test
+
